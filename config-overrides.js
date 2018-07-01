@@ -9,6 +9,7 @@ module.exports = function override(config, env) {
       Icons: path.resolve(__dirname, "src/Icons"),
       Views: path.resolve(__dirname, "src/Views"),
       Styles: path.resolve(__dirname, "src/Styles"),
+      Utils: path.resolve(__dirname, "src/Utils"),
       Shared: path.resolve(__dirname, "shared")
     }
   };
