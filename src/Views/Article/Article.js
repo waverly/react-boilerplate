@@ -2,6 +2,7 @@ import React, { Component, Fragment } from "react";
 import styled from "styled-components";
 import { linkResolver } from "Utils/prismic-configuration";
 import Prismic from "prismic-javascript";
+import PrismicDOM from "prismic-dom";
 import { RichText, Date } from "prismic-reactjs";
 
 const PageWrap = styled.div`
