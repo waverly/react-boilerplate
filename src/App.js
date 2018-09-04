@@ -1,34 +1,57 @@
+// @flow
+
 import React, { Component } from "react";
 import { Switch, Route, HashRouter, Link } from "react-router-dom";
 import Prismic from "prismic-javascript";
-import { linkResolver } from "Utils/prismic-configuration";
-import { RichText, Date } from "prismic-reactjs";
+import { injectGlobal, ThemeProvider } from "styled-components";
+import { globalStyles } from "Styles/global";
+import { theme } from "Styles/themes";
 
-import Home from "Views/Home";
+import Homepage from "./Views/Homepage";
 import logo from "./logo.svg";
-import "./App.css";
 
-const apiEndpoint = "https://wav-experiments.prismic.io/api/v2";
+injectGlobal`
+	${globalStyles}
+`;
+
+const apiEndpoint = "https://pussypedia.prismic.io/api/v2";
 
 class App extends Component {
   state = {
     home: [],
+    articles: [],
     posts: []
   };
-  addData = items => {
-    const homePage = items.filter(i => i.type === "home");
-    const postItems = items.filter(i => i.type === "post");
-
-    const home = [...this.state.home];
-    const posts = [...this.state.posts];
-
-    home.push(homePage);
-
-    this.setState({
-      home: homePage,
-      posts: postItems
-    });
-  };
+  //
+  // addData = items => {
+  //   const homePage = items.filter(i => i.type === "home");
+  //   const postItems = items.filter(i => i.type === "post");
+  //   const articleItems = items.filter(i => i.type === "article");
+  //
+  //   const home = [...this.state.home];
+  //   const articles = [...this.state.articles];
+  //   const posts = [...this.state.posts];
+  //
+  //   homePage.map(h => {
+  //     home.push(h);
+  //   });
+  //
+  //   articleItems.map(a => {
+  //     articles.push(a);
+  //   });
+  //
+  //   postItems.map(p => {
+  //     posts.push(p);
+  //   });
+  //
+  //   posts.push(postItems);
+  //
+  //   this.setState({
+  //     home,
+  //     articles,
+  //     posts
+  //   });
+  // };
 
   componentDidMount() {
     Prismic.api(apiEndpoint).then(api => {
@@ -38,24 +61,26 @@ class App extends Component {
           pageSize: 100
         })
         .then(response => {
-          this.addData(response.results);
+          // console.log(response.results);
+          // this.addData(response.results);
         });
     });
   }
+
   render() {
-    if (this.state.home.length > 0) {
-      console.log(this.state.home[0].data.richtext);
-      return (
-        <div className="App">
-          <div className="content-test">
-            {RichText.render(this.state.home[0].data.richtext, linkResolver)}
-          </div>
-          <Route exact path="/" render={props => <Home {...props} />} />
+    return (
+      <ThemeProvider theme={theme}>
+        <div>
+          {/* <Navigation /> */}
+          <Switch>
+            <Route path="/" exact component={Homepage} />
+            {/* <Route path="/topics" exact component={Topics} /> */}
+
+            {/* <Route component={NotFound} /> */}
+          </Switch>
         </div>
-      );
-    } else {
-      return " ";
-    }
+      </ThemeProvider>
+    );
   }
 }
 
